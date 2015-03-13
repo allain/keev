@@ -1,0 +1,33 @@
+{
+  "name": "keev",
+  "version": "0.1.0",
+  "description": "Key Value Streaming store",
+  "main": "index.js",
+  "scripts": {
+    "test": "node_modules/.bin/mocha",
+    "format": "find .  -name '*.js' -not -path './node_modules/*' | xargs node_modules/.bin/js-beautify --replace"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/allain/keev"
+  },
+  "keywords": [
+    "key value",
+    "store"
+  ],
+  "author": "allain <allain.lalonde@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/allain/keev/issues"
+  },
+  "dependencies": {
+    "async": "^0.9.0"
+  },
+  "devDependencies": {
+    "chai": "~1.8.1",
+    "concat-stream": "^1.4.7",
+    "js-beautify": "^1.5.5",
+    "mocha": "~1.17.0",
+    "stdout": "0.0.3"
+  }
+}
