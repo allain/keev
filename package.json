@@ -1,7 +1,7 @@
 {
   "name": "keev",
   "version": "0.1.0",
-  "description": "Key Value Streaming store",
+  "description": "Minimalist Key/Value store with a streaming api",
   "main": "index.js",
   "scripts": {
     "test": "node_modules/.bin/mocha",
