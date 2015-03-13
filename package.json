@@ -21,7 +21,8 @@
     "url": "https://github.com/allain/keev/issues"
   },
   "dependencies": {
-    "async": "^0.9.0"
+    "async-each": "^0.1.6",
+    "run-parallel": "^1.0.0"
   },
   "devDependencies": {
     "chai": "~1.8.1",

@@ -1,5 +1,6 @@
 var util = require('util');
-var async = require('async');
+var each = require('async-each');
+var parallel = require('run-parallel');
 
 var Transform = require('stream').Transform;
 
@@ -21,7 +22,7 @@ function Keev(options) {
   // If the store does not implement batch method, then implement them using single ones
 
   store.putAll = store.putAll || function (obj, cb) {
-    async.each(Object.keys(obj), function (key, cb) {
+    each(Object.keys(obj), function (key, cb) {
       store.put(key, obj[key], cb);
     }, cb);
   };
@@ -29,7 +30,7 @@ function Keev(options) {
   store.getAll = store.getAll || function (keys, cb) {
     var result = {};
 
-    async.each(keys, function (key, cb) {
+    each(keys, function (key, cb) {
       store.get(key, function (err, val) {
         if (err) return cb(err);
 
@@ -44,7 +45,7 @@ function Keev(options) {
   };
 
   store.removeAll = store.removeAll || function (keys, cb) {
-    async.each(keys, function (key, cb) {
+    each(keys, function (key, cb) {
       store.remove(key, cb);
     }, cb);
   };
@@ -68,7 +69,7 @@ function Keev(options) {
       }
     });
 
-    async.parallel({
+    parallel({
       putAllResult: function (cb) {
         store.putAll(putMap, cb);
       },
