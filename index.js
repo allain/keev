@@ -16,8 +16,7 @@ function Keev(options) {
 
   Transform.call(this, options);
 
-  var Store = options.store || require('./lib/memory-store.js');
-  var store = Store(options);
+  var store = options.store || require('./lib/memory-store.js')();
 
   // If the store does not implement batch method, then implement them using single ones
 

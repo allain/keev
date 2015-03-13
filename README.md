@@ -32,7 +32,7 @@ db.write({ a: null }); // Succeeds in not returning the key a
 
 ```var db = require('keev')({options});```
 
-`options.store` is a factory function for creating stores. If a store it not given, it will assume a memory store.
+`options.store` is a an object with the following methods. If a store it not given, it will assume a memory store.
 
 A store must implement:
 
