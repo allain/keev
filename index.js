@@ -44,37 +44,23 @@ function Keev(options) {
     });
   };
 
-  store.removeAll = store.removeAll || function (keys, cb) {
-    each(keys, function (key, cb) {
-      store.remove(key, cb);
-    }, cb);
-  };
-
   this._transform = function (obj, enc, cb) {
-    var putMap = {};
+    var changeMap = {};
     var getKeys = [];
-    var removeKeys = [];
 
     Object.keys(obj).forEach(function (key) {
       var value = obj[key];
 
-      if (value === undefined) {
-        //Delete
-        removeKeys.push(key);
-      } else if (value === null) {
-        // Query
+      if (value === null) {
         getKeys.push(key);
       } else {
-        putMap[key] = value;
+        changeMap[key] = value;
       }
     });
 
     parallel({
       putAllResult: function (cb) {
-        store.putAll(putMap, cb);
-      },
-      removeAllResult: function (cb) {
-        store.removeAll(removeKeys, cb);
+        store.putAll(changeMap, cb);
       },
       getAllResult: function (cb) {
         store.getAll(getKeys, cb);

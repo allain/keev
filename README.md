@@ -43,10 +43,7 @@ A store must implement:
 
 `put(key, value, cb)`
 > where cb is a callback that with the signature (err).
-> Key must be a string and value must be JSON serializable
+> Key must be a string and value must be JSON serializable, or undefined. If the value is undefined,
+> it should delete the key fro the store.
 
-
-`remove(key, cb)`
-> where cb is a callback that with the signature (err).
-
-Optionally a store may implement `getAll`, `putAll`, `removeAll`, which perform batch bersion of the above method.
+Optionally a store may implement `getAll`, `putAll` which perform batch version of the above methods.
