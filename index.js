@@ -82,12 +82,10 @@ function Keev(options) {
     }, function (err, results) {
       if (err) return cb(err);
 
-      var result = putMap;
+      var result = obj;
+
       Object.keys(results.getAllResult).forEach(function (key) {
-        var value = results.getAllResult[key];
-        if (value !== undefined) {
-          result[key] = value;
-        }
+        result[key] = results.getAllResult[key];
       });
 
       cb(null, result);
