@@ -1,10 +1,6 @@
 var util = require('util');
-var each = require('async-each');
-var parallel = require('run-parallel');
 
 var Transform = require('stream').Transform;
-
-util.inherits(Keev, Transform);
 
 module.exports = Keev;
 
@@ -13,68 +9,42 @@ function Keev(options) {
     return new Keev(options);
 
   options = options || {};
-  options.objectMode = true;
-
-  Transform.call(this, options);
 
   var store = options.store || require('./lib/memory-store.js')();
+  var putAll = store.putAll.bind(store);
+  var getAll = store.getAll.bind(store);
 
-  // If the store does not implement batch method, then implement them using single ones
+  this.createStream = function() {
+    var stream = new Transform({objectMode: true});
 
-  store.putAll = store.putAll || function (obj, cb) {
-    each(Object.keys(obj), function (key, cb) {
-      store.put(key, obj[key], cb);
-    }, cb);
-  };
+    stream._transform = function (obj, enc, cb) {
+      var changeMap = {};
+      var getKeys = [];
 
-  store.getAll = store.getAll || function (keys, cb) {
-    var result = {};
+      Object.keys(obj).forEach(function (key) {
+        var value = obj[key];
 
-    each(keys, function (key, cb) {
-      store.get(key, function (err, val) {
+        if (value === null) {
+          getKeys.push(key);
+        } else {
+          changeMap[key] = value;
+        }
+      });
+
+      putAll(changeMap, function(err) {
         if (err) return cb(err);
 
-        result[key] = val;
-        cb();
+        getAll(getKeys, function(err, getAllResult) {
+          if (err) return cb(err);
+
+          var result = obj;
+          Object.keys(getAllResult).forEach(function(key) {
+            result[key] = getAllResult[key];
+          });
+          cb(null, result);
+        });
       });
-    }, function (err) {
-      if (err) return cb(err);
-
-      cb(null, result);
-    });
-  };
-
-  this._transform = function (obj, enc, cb) {
-    var changeMap = {};
-    var getKeys = [];
-
-    Object.keys(obj).forEach(function (key) {
-      var value = obj[key];
-
-      if (value === null) {
-        getKeys.push(key);
-      } else {
-        changeMap[key] = value;
-      }
-    });
-
-    parallel({
-      putAllResult: function (cb) {
-        store.putAll(changeMap, cb);
-      },
-      getAllResult: function (cb) {
-        store.getAll(getKeys, cb);
-      },
-    }, function (err, results) {
-      if (err) return cb(err);
-
-      var result = obj;
-
-      Object.keys(results.getAllResult).forEach(function (key) {
-        result[key] = results.getAllResult[key];
-      });
-
-      cb(null, result);
-    });
+    };
+    return stream;
   };
 }

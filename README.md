@@ -19,13 +19,15 @@ var stdout = require('stdout');
 
 var db = require('keev')();
 
-db.pipe(stdout()); // Just spit it to the console
+var dbStream = db.createStream();
 
-db.write({ a: 10 }); // Store a=10
-db.write({ a: null }); // Query for the value of a
-db.write({ a: "foo" }); // Store a="foo"
-db.write({ a: undefined }); // Delete a from store
-db.write({ a: null }); // Succeeds in not returning the key a
+dbStream.pipe(stdout()); // Just spit it to the console
+
+dbStream.write({ a: 10 }); // Store a=10
+dbStream.write({ a: null }); // Query for the value of a
+dbStream.write({ a: "foo" }); // Store a="foo"
+dbStream.write({ a: undefined }); // Delete a from store
+dbStream.write({ a: null }); // Succeeds in not returning the key a
 ```
 
 ## API
@@ -36,14 +38,10 @@ db.write({ a: null }); // Succeeds in not returning the key a
 
 A store must implement:
 
-`get(key, cb)`
-> where cb is a callback that with the signature (err, value).
-> If no value is found, it should return undefined, but not
-> error.
+`getAll(keys, cb)`
+> where cb is a callback that with the signature (err, obj).
+> For each key passed in the object will have a property, if a value is not found, it's value will be undefined.
 
-`put(key, value, cb)`
+`putAll(obj, cb)`
 > where cb is a callback that with the signature (err).
-> Key must be a string and value must be JSON serializable, or undefined. If the value is undefined,
-> it should delete the key fro the store.
-
-Optionally a store may implement `getAll`, `putAll` which perform batch version of the above methods.
+> For each key in the object, the store should delete the key if the value given is undefined, or set it otherwise.

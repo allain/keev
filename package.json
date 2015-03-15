@@ -1,11 +1,10 @@
 {
   "name": "keev",
   "version": "0.2.0",
-  "description": "Minimalist Key/Value store with a streaming api",
+  "description": "Minimalist Key/Value store with a streaming api.",
   "main": "index.js",
   "scripts": {
-    "test": "node_modules/.bin/mocha",
-    "format": "find .  -name '*.js' -not -path './node_modules/*' | xargs node_modules/.bin/js-beautify --replace"
+    "test": "node_modules/.bin/mocha"
   },
   "repository": {
     "type": "git",
@@ -20,10 +19,7 @@
   "bugs": {
     "url": "https://github.com/allain/keev/issues"
   },
-  "dependencies": {
-    "async-each": "^0.1.6",
-    "run-parallel": "^1.0.0"
-  },
+  "dependencies": {},
   "devDependencies": {
     "chai": "~1.8.1",
     "concat-stream": "^1.4.7",
