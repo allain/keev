@@ -1,6 +1,6 @@
 {
   "name": "keev",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Minimalist Key/Value store with a streaming api.",
   "main": "index.js",
   "scripts": {
